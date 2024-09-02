@@ -1,33 +1,58 @@
 package com.week2.labs.ConcurrencyMultithreading.controller;
 
 import com.week2.labs.ConcurrencyMultithreading.service.BankingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/bank")
+@RequestMapping("/api/banking")
 public class BankingController {
+    private final BankingService bankingService;
 
-    @Autowired
-    private BankingService bankingService;
+    public BankingController(BankingService bankingService) {
+        this.bankingService = bankingService;
+    }
 
-    @PostMapping("/create")
-    public void createAccount(@RequestParam String accountNumber, @RequestParam double initialBalance) {
+    @PostMapping("/createAccount")
+    public String createAccount(@RequestParam String accountNumber, @RequestParam double initialBalance) {
         bankingService.createAccount(accountNumber, initialBalance);
+        return "Account created: " + accountNumber;
     }
 
     @PostMapping("/deposit")
-    public void deposit(@RequestParam String accountNumber, @RequestParam double amount) {
+    public String deposit(@RequestParam String accountNumber, @RequestParam double amount) {
         bankingService.deposit(accountNumber, amount);
+        return "Deposited " + amount + " to account: " + accountNumber;
     }
 
     @PostMapping("/withdraw")
-    public void withdraw(@RequestParam String accountNumber, @RequestParam double amount) {
+    public String withdraw(@RequestParam String accountNumber, @RequestParam double amount) {
         bankingService.withdraw(accountNumber, amount);
+        return "Withdrew " + amount + " from account: " + accountNumber;
     }
 
-    @GetMapping("/balance")
-    public double getBalance(@RequestParam String accountNumber) {
-        return bankingService.getBalance(accountNumber);
+    @GetMapping("/balance/concurrent")
+    public double getConcurrentBalance(@RequestParam String accountNumber) {
+        return bankingService.getConcurrentBalance(accountNumber);
+    }
+
+    @GetMapping("/balance/regular")
+    public double getRegularBalance(@RequestParam String accountNumber) {
+        return bankingService.getRegularBalance(accountNumber);
+    }
+
+    @GetMapping("/performance/concurrent")
+    public long measureConcurrentMapPerformance() {
+        return bankingService.measureConcurrentMapPerformance();
+    }
+
+    @GetMapping("/performance/regular")
+    public long measureRegularMapPerformance() {
+        return bankingService.measureRegularMapPerformance();
+    }
+
+    @PostMapping("/clearAccounts")
+    public String clearAccounts() {
+        bankingService.clearAccounts();
+        return "All accounts cleared.";
     }
 }
