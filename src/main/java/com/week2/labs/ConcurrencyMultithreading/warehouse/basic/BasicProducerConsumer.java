@@ -1,12 +1,12 @@
-package com.week2.labs.ConcurrencyMultithreading.warehouse.waitAndNotify;
+package com.week2.labs.ConcurrencyMultithreading.warehouse.basic;
 
 
 public class BasicProducerConsumer {
     public static void main(String[] args) {
         Inventory warehouse = new Inventory();
 
-        Thread producerThread = new Thread(new Producer(warehouse));
-        Thread consumerThread = new Thread(new Consumer(warehouse));
+        Thread producerThread = new Thread(new Producer(warehouse,4));
+        Thread consumerThread = new Thread(new Consumer(warehouse,4));
 
         producerThread.start();
         consumerThread.start();

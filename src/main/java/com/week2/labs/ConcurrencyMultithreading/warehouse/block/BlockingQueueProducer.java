@@ -1,25 +1,26 @@
 package com.week2.labs.ConcurrencyMultithreading.warehouse.block;
 
-import java.util.concurrent.BlockingQueue;
-
 public class BlockingQueueProducer implements Runnable {
-    private final BlockingQueue<String> queue;
+    private final WarehouseBlockingQueue warehouse;
+    private final int itemCount;
 
-    public BlockingQueueProducer(BlockingQueue<String> queue) {
-        this.queue = queue;
+    public BlockingQueueProducer(WarehouseBlockingQueue warehouse, int itemCount) {
+        this.warehouse = warehouse;
+        this.itemCount = itemCount;
     }
 
     @Override
     public void run() {
         try {
-            for (int i = 1; i <= 10; i++) {
-                queue.put("Item " + i); // Blocking if queue is full
-                System.out.println("Produced: Item " + i);
-                Thread.sleep(100); // Simulate production time
+            for (int i = 0; i < itemCount; i++) {
+                warehouse.produce(i);
+//                System.out.println("Produced: " + i);
+//                Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Producer interrupted: " + e.getMessage());
+
         }
     }
 }

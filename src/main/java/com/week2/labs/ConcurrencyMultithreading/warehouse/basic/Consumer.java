@@ -1,10 +1,11 @@
-package com.week2.labs.ConcurrencyMultithreading.warehouse.block;
+package com.week2.labs.ConcurrencyMultithreading.warehouse.basic;
 
-public class BlockingQueueConsumer implements Runnable {
-    private final WarehouseBlockingQueue warehouse;
+
+public class Consumer implements Runnable {
+    private final Inventory warehouse;
     private final int itemCount;
 
-    public BlockingQueueConsumer(WarehouseBlockingQueue warehouse, int itemCount) {
+    public Consumer(Inventory warehouse, int itemCount) {
         this.warehouse = warehouse;
         this.itemCount = itemCount;
     }
@@ -15,12 +16,10 @@ public class BlockingQueueConsumer implements Runnable {
             for (int i = 0; i < itemCount; i++) {
                 warehouse.consume();
 //                System.out.println("Consumed: " + i);
-//                Thread.sleep(1000);
+//                Thread.sleep(100);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.err.println("Consumer interrupted: " + e.getMessage());
-
         }
     }
 }
