@@ -16,56 +16,14 @@ public class BankingService {
     private Map<String, BankAccount> concurrentAccounts = new ConcurrentHashMap<>();
     private Map<String, BankAccount> regularAccounts = new HashMap<>();
 
+    // Create accounts in both maps
     public void createAccount(String accountNumber, double initialBalance) {
         concurrentAccounts.put(accountNumber, new BankAccount(accountNumber, initialBalance));
         regularAccounts.put(accountNumber, new BankAccount(accountNumber, initialBalance));
         logger.info("Created account: {}", accountNumber);
     }
 
-    public void deposit(String accountNumber, double amount) {
-        BankAccount concurrentAccount = concurrentAccounts.get(accountNumber);
-        BankAccount regularAccount = regularAccounts.get(accountNumber);
-        if (concurrentAccount != null && regularAccount != null) {
-            concurrentAccount.deposit(amount);
-            regularAccount.deposit(amount);
-            logger.info("Deposited {} to account: {}", amount, accountNumber);
-        } else {
-            logger.warn("Account not found for deposit: {}", accountNumber);
-        }
-    }
-
-    public void withdraw(String accountNumber, double amount) {
-        BankAccount concurrentAccount = concurrentAccounts.get(accountNumber);
-        BankAccount regularAccount = regularAccounts.get(accountNumber);
-        if (concurrentAccount != null && regularAccount != null) {
-            concurrentAccount.withdraw(amount);
-            regularAccount.withdraw(amount);
-            logger.info("Withdrew {} from account: {}", amount, accountNumber);
-        } else {
-            logger.warn("Account not found for withdrawal: {}", accountNumber);
-        }
-    }
-
-    public double getConcurrentBalance(String accountNumber) {
-        BankAccount account = concurrentAccounts.get(accountNumber);
-        double balance = (account != null) ? account.getBalance() : 0;
-        logger.info("Balance for account {}: {}", accountNumber, balance);
-        return balance;
-    }
-
-    public double getRegularBalance(String accountNumber) {
-        BankAccount account = regularAccounts.get(accountNumber);
-        double balance = (account != null) ? account.getBalance() : 0;
-        logger.info("Balance for account {}: {}", accountNumber, balance);
-        return balance;
-    }
-
-    public void clearAccounts() {
-        concurrentAccounts.clear();
-        regularAccounts.clear();
-        logger.info("Cleared all accounts.");
-    }
-
+    // Measure ConcurrentHashMap performance
     public long measureConcurrentMapPerformance() {
         long startTime = System.nanoTime();
         for (int i = 0; i < 100000; i++) {
@@ -76,7 +34,7 @@ public class BankingService {
         logger.info("ConcurrentHashMap performance duration: {} ns", duration);
         return duration;
     }
-
+    // Measure HashMap performance
     public long measureRegularMapPerformance() {
         long startTime = System.nanoTime();
         for (int i = 0; i < 100000; i++) {

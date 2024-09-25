@@ -9,12 +9,12 @@ public class BankAccount {
         this.balance = initialBalance;
     }
 
-    public synchronized void deposit(double amount) {
+    public  void deposit(double amount) {
         balance += amount;
         System.out.println(Thread.currentThread().getName() + " deposited $" + amount + ". New balance: $" + balance);
     }
 
-    public synchronized void withdraw(double amount) {
+    public  void withdraw(double amount) {
         if (balance >= amount) {
             balance -= amount;
             System.out.println(Thread.currentThread().getName() + " withdrew $" + amount + ". New balance: $" + balance);
@@ -23,7 +23,7 @@ public class BankAccount {
         }
     }
 
-    public synchronized double getBalance() {
+    public  double getBalance() {
         System.out.println(Thread.currentThread().getName() + " checked balance: $" + balance);
         return balance;
     }
